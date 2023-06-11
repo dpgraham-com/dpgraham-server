@@ -1,4 +1,8 @@
 terraform {
+  backend "gcs" {
+    bucket  = "dpgraham-terraform-state1"
+    prefix  = "terraform1"
+  }
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -8,7 +12,7 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("dpgraham-56a7b1b3d974.json")
+  credentials = file("terraform-key.json")
   project = "dpgraham"
   region  = "us-east1"
   zone    = "us-east1-b"
