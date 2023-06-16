@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
-    bucket  = "dpgraham-terraform-state1"
-    prefix  = "terraform1"
+    bucket = "dpgraham-terraform-state1"
+    prefix = "terraform1"
   }
   required_providers {
     google = {
@@ -13,9 +13,21 @@ terraform {
 
 provider "google" {
   credentials = file("terraform-key.json")
-  project = "dpgraham"
-  region  = "us-east1"
-  zone    = "us-east1-b"
+  project     = "dpgraham"
+  region      = "us-east1"
+  zone        = "us-east1-b"
+}
+
+variable "project" {
+  default     = "dpgraham"
+  type        = string
+  description = "The project ID"
+}
+
+variable "region" {
+  type        = string
+  description = "The region to deploy to"
+  default     = "us-east1"
 }
 
 resource "google_compute_network" "vpc_network" {
@@ -25,13 +37,13 @@ resource "google_compute_network" "vpc_network" {
 resource "google_sql_database_instance" "dpgraham_postgres" {
   name             = "dpgraham-postgres"
   database_version = "POSTGRES_14"
-  region           = "us-east1"
-  project          = "dpgraham"
+  region           = var.region
+  project          = var.project
 
   settings {
-    tier                 = "db-f1-micro"
-    activation_policy    = "ALWAYS"
-    availability_type    = "ZONAL"
+    tier              = "db-f1-micro"
+    activation_policy = "ALWAYS"
+    availability_type = "ZONAL"
   }
 }
 
