@@ -30,6 +30,12 @@ variable "region" {
   default     = "us-east1"
 }
 
+variable "db_username" {
+  description = "Database administrator username"
+  type        = string
+  default     = "root" // POC for now
+}
+
 resource "google_compute_network" "vpc_network" {
   name = "terraform-network"
 }
@@ -50,4 +56,10 @@ resource "google_sql_database_instance" "dpgraham_postgres" {
 resource "google_sql_database" "dpgraham_database" {
   name     = "dpgraham-database"
   instance = google_sql_database_instance.dpgraham_postgres.name
+}
+
+resource "google_sql_user" "users" {
+  instance = google_sql_database_instance.dpgraham_postgres.name
+  name     = var.db_username
+  type     = "CLOUD_IAM_USER"
 }
