@@ -50,6 +50,10 @@ resource "google_sql_database_instance" "dpgraham_postgres" {
     tier              = "db-f1-micro"
     activation_policy = "ALWAYS"
     availability_type = "ZONAL"
+    database_flags {
+      name  = "cloudsql.iam_authentication"
+      value = "on"
+    }
   }
 }
 
