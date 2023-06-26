@@ -1,5 +1,6 @@
 tmp/
 .idea/
+.run/
 
 # Python template
 __pycache__/
