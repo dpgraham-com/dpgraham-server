@@ -8,9 +8,9 @@ import (
 	"testing"
 )
 
-func TestBlogRoutes(t *testing.T) {
+func TestArticleRoutes(t *testing.T) {
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
-	GetBlog(c)
+	GetArticle(c)
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }

@@ -28,7 +28,7 @@ func init() {
 }
 
 func QueryAllArticles() ([]models.Article, error) {
-	allBlogQuery, err := db.Prepare(
+	allArticleQuery, err := db.Prepare(
 		` SELECT
                      id,
                      to_char(created_date, 'mm/dd/yyyy'),
@@ -44,23 +44,23 @@ func QueryAllArticles() ([]models.Article, error) {
 	if err != nil {
 		return nil, err
 	}
-	rows, err := allBlogQuery.Query()
+	rows, err := allArticleQuery.Query()
 	if err != nil {
 		return nil, err
 	}
-	var blogs []models.Article
+	var articles []models.Article
 	for rows.Next() {
 		var article models.Article
 		if err := rows.Scan(&article.Id, &article.CreatedDate, &article.LastUpdate, &article.Content, &article.Published,
 			&article.Title, &article.Author); err != nil {
-			return blogs, err
+			return articles, err
 		}
-		blogs = append(blogs, article)
+		articles = append(articles, article)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return blogs, nil
+	return articles, nil
 }
 
 func QueryArticle(id int) (models.Article, error) {

@@ -18,12 +18,13 @@ func routerSetup() (router *gin.Engine) {
 	// Set gin routes AFTER config
 	api := router.Group("/api")
 	{
-		api.GET("/blog", routes.GetAllBlogs)
-		api.GET("/blog/:id", routes.GetBlog)
+		api.GET("/blog", routes.GetAllArticles)
+		api.GET("/blog/:id", routes.GetArticle)
 	}
 	return
 }
 
+// Entry point for the application
 func main() {
 	router := routerSetup()
 	err := router.Run(":8080")
