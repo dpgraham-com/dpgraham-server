@@ -56,9 +56,7 @@ create_migration_file(){
   exit 0
 }
 
-
-
-migrate_up(){
+parse_db_flags(){
   echo "Parsing database options..."
   while [[ $# -gt 0 ]]; do
     case $1 in
@@ -98,7 +96,9 @@ migrate_up(){
         ;;
     esac
   done
-  # Check if all required options are set
+}
+
+check_db_flags(){
   if [ -z "$user" ]; then
       echo "missing CLI argument --user"
       exit 1
@@ -119,9 +119,23 @@ migrate_up(){
     # default port
     port="5432"
   fi
+}
 
-  echo "Running migrations..."
+migrate_up(){
+  parse_db_flags "$@"
+  # Check if all required options are set
+  check_db_flags
+  echo "Running migrations UP..."
   migrate  -database "postgresql://$user:$password@$host:$port/$database?$query" -path "db/migrations" up
+  exit 0
+}
+
+migrate_down(){
+  parse_db_flags "$@"
+  # Check if all required options are set
+  check_db_flags
+  echo "Running migrations DOWN..."
+  yes | migrate  -database "postgresql://$user:$password@$host:$port/$database?$query" -path "db/migrations" down
   exit 0
 }
 
@@ -140,9 +154,14 @@ while [[ $# -gt 0 ]]; do
     -d|--db)
       start_db
       ;;
-    -m|--migrate)
+    --migrate-up)
       shift
       migrate_up "$@"
+      exit 0
+      ;;
+    --migrate-down)
+      shift
+      migrate_down "$@"
       exit 0
       ;;
     -h|--help)
