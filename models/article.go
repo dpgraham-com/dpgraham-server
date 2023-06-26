@@ -7,6 +7,6 @@ type Article struct {
 	LastUpdate  string `json:"updateDate"`
 	CreatedDate string `json:"createDate"`
 	Published   bool   `json:"publish"`
-	ArticleType string `json:"type"`
+	Author      string `json:"author"`
 	Content     string `json:"content"`
 }

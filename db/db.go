@@ -27,18 +27,18 @@ func init() {
 	}
 }
 
-func QueryAllBlog() ([]models.Article, error) {
+func QueryAllArticles() ([]models.Article, error) {
 	allBlogQuery, err := db.Prepare(
 		` SELECT
                      id,
                      to_char(created_date, 'mm/dd/yyyy'),
                      to_char(updated_date, 'mm/dd/yyyy'),
-                     article_content,
+                     content,
                      published,
                      title,
-                     type
+                     author
                 FROM
-                    article
+                    articles
                 WHERE
                     published = true`)
 	if err != nil {
@@ -50,12 +50,12 @@ func QueryAllBlog() ([]models.Article, error) {
 	}
 	var blogs []models.Article
 	for rows.Next() {
-		var blog models.Article
-		if err := rows.Scan(&blog.Id, &blog.CreatedDate, &blog.LastUpdate, &blog.Content, &blog.Published,
-			&blog.Title, &blog.ArticleType); err != nil {
+		var article models.Article
+		if err := rows.Scan(&article.Id, &article.CreatedDate, &article.LastUpdate, &article.Content, &article.Published,
+			&article.Title, &article.Author); err != nil {
 			return blogs, err
 		}
-		blogs = append(blogs, blog)
+		blogs = append(blogs, article)
 	}
 	if err != nil {
 		return nil, err
@@ -63,13 +63,13 @@ func QueryAllBlog() ([]models.Article, error) {
 	return blogs, nil
 }
 
-func QueryBlog(id int) (models.Article, error) {
-	blog := models.Article{}
-	err := db.QueryRow("SELECT * FROM article WHERE id = $1", id).Scan(
-		&blog.Id, &blog.CreatedDate, &blog.LastUpdate, &blog.Content, &blog.Published,
-		&blog.Title, &blog.ArticleType)
+func QueryArticle(id int) (models.Article, error) {
+	article := models.Article{}
+	err := db.QueryRow("SELECT * FROM articles WHERE id = $1", id).Scan(
+		&article.Id, &article.CreatedDate, &article.LastUpdate, &article.Content, &article.Published,
+		&article.Title, &article.Author)
 	if err != nil {
-		return blog, err
+		return article, err
 	}
-	return blog, nil
+	return article, nil
 }

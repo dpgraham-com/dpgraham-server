@@ -16,7 +16,7 @@ func GetBlog(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	blogById, err := db.QueryBlog(idInt)
+	blogById, err := db.QueryArticle(idInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
@@ -27,7 +27,7 @@ func GetBlog(c *gin.Context) {
 
 // GetAllBlogs Top level handlerFunc that returns a list of Blog metadata
 func GetAllBlogs(c *gin.Context) {
-	allBlogs, err := db.QueryAllBlog()
+	allBlogs, err := db.QueryAllArticles()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
