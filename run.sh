@@ -59,7 +59,7 @@ create_migration_file(){
     echo "Error: migrate is not installed." >&2
   fi
   echo "Creating new migration: $1"
-  migrate create -ext sql -dir db/migrations -format unix "$1"
+  migrate create -ext sql -dir "$base_dir/db/migrations" -format unix "$1"
   exit 0
 }
 

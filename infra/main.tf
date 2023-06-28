@@ -36,6 +36,12 @@ variable "db_username" {
   default     = "root" // POC for now
 }
 
+variable "db_password" {
+  description = "Database administrator password"
+  type        = string
+  sensitive   = true
+}
+
 resource "google_compute_network" "vpc_network" {
   name = "terraform-network"
 }
@@ -58,12 +64,13 @@ resource "google_sql_database_instance" "dpgraham_postgres" {
 }
 
 resource "google_sql_database" "dpgraham_database" {
-  name     = "dpgraham-database"
+  name     = "dpgraham"
   instance = google_sql_database_instance.dpgraham_postgres.name
 }
 
 resource "google_sql_user" "users" {
   instance = google_sql_database_instance.dpgraham_postgres.name
+  type     = "BUILT_IN"
   name     = var.db_username
-  type     = "CLOUD_IAM_USER"
+  password = var.db_password
 }
