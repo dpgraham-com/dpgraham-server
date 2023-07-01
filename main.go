@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/dpgrahm4401/dpgraham-server/db"
 	"github.com/dpgrahm4401/dpgraham-server/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,10 @@ import (
 
 // routerSetup returns a fully configured mux(?) with routes attached
 func routerSetup() (router *gin.Engine) {
+	// Create and config Env used to dependency inject necessary items for handlers
+	env := routes.Env{
+		DB: db.ConnectDatabase(),
+	}
 	// Create and config gin.Engine
 	router = gin.Default()
 	router.Use(cors.New(cors.Config{
@@ -18,8 +23,8 @@ func routerSetup() (router *gin.Engine) {
 	// Set gin routes AFTER config
 	api := router.Group("/api")
 	{
-		api.GET("/blog", routes.GetAllArticles)
-		api.GET("/blog/:id", routes.GetArticle)
+		api.GET("/blog", env.GetAllArticles)
+		api.GET("/blog/:id", env.GetArticle)
 	}
 	return
 }
