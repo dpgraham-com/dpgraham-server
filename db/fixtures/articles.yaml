@@ -14,3 +14,11 @@
   created_date: 2022-12-31 23:59:59
   updated_date: 2022-12-31 23:59:59
   published: false
+
+- id: 3
+  title: My First Article
+  content: Hello, it's me. I was wondering if after all these years you'd like to meet.
+  author: John Doe
+  created_date: 2021-1-21 23:59:59
+  updated_date: 2022-1-25 23:59:59
+  published: true

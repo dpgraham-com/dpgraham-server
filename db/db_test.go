@@ -66,6 +66,14 @@ func prepareTestDatabase() {
 func TestQueryArticleById(t *testing.T) {
 	prepareTestDatabase()
 	article, _ := QueryArticle(db, 1)
-	fmt.Println(article)
 	assert.Equal(t, article.Id, 1)
+}
+
+// Test returns all published articles
+func TestQueryAllReturnsOnlyPublished(t *testing.T) {
+	prepareTestDatabase()
+	allArticles, _ := QueryAllArticles(db)
+	for _, article := range allArticles {
+		assert.Equal(t, article.Published, true)
+	}
 }
