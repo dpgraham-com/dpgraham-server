@@ -9,7 +9,8 @@ print_usage() {
    echo
    echo    "Syntax: $(basename "$0") <option>"
    echo    "options:"
-   echo    "-d, --db                     \tBring up the local development database and expose it on port 5432"
+   echo -e "-d, --db                     \tBring up the local development database and expose it on port 5432"
+   echo -e "--test-db                    \tBring up the test postgres database and expose on port 5432"
    echo -e "-n, --new-migration  <NAME>  \tCreate new empty migration file(s)"
    echo -e "-m, --migrate  [<OPTIONS>]   \tCreate new empty migration file(s)"
    echo -e "-h, --help                   \tPrint this help message"
@@ -41,7 +42,13 @@ start_db(){
       echo "Docker not found"
       exit 1
     fi
-    eval "$docker_exec compose -f $base_dir/docker-compose.yaml up postgres -d"
+    if [ $1 = "test" ]; then
+      echo "Starting test database..."
+      eval "$docker_exec compose --env-file $base_dir/configs/.env.test -f $base_dir/docker-compose.yaml up postgres -d"
+      exit 0
+    fi
+    echo "Starting development database..."
+    eval "$docker_exec compose --env-file $base_dir/configs/.env.dev -f $base_dir/docker-compose.yaml up postgres -d"
     exit 0
 }
 
@@ -151,8 +158,11 @@ while [[ $# -gt 0 ]]; do
           exit 1
         fi
         ;;
+    --test-db)
+      start_db "test"
+      ;;
     -d|--db)
-      start_db
+      start_db "dev"
       ;;
     --migrate-up)
       shift

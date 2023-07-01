@@ -19,8 +19,7 @@ func TestMain(m *testing.M) {
 	var err error
 
 	// Open connection to the test database.
-	db, err = sql.Open("postgres", "dbname=dpgraham user=dg password=password123 host=localhost port=5432 sslmode=disable")
-	//db, err := sql.Open("sqlite3", "file:./db.sqlite3?cache=shared")
+	db, err = sql.Open("postgres", "dbname=dpgraham_test user=dg password=password123 host=localhost port=5432 sslmode=disable")
 	if err != nil {
 		fmt.Println(err)
 	}

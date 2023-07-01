@@ -22,9 +22,9 @@ services:
     container_name: dpg-postgres
     image: 'postgres:14'
     environment:
-      POSTGRES_DB: dpgraham
-      POSTGRES_USER: dg
-      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: ${DPG_DB_NAME}
+      POSTGRES_USER: ${DPG_DB_USER}
+      POSTGRES_PASSWORD: ${DPG_DB_PASSWORD}
     ports:
       - '5432:5432'
     healthcheck:
@@ -33,7 +33,7 @@ services:
       timeout: 3s
       retries: 5
     volumes:
-      - development:/var/lib/postgresql/data
+      - dpg-development:/var/lib/postgresql/data
 
 volumes:
-  development:
+  dpg-development:

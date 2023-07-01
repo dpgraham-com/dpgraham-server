@@ -1,6 +1,6 @@
 # configs
 .editorconfig
-.env.example
+configs/*
 .dockerignore
 dpg-server/
 
