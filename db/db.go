@@ -9,9 +9,6 @@ import (
 	"os"
 )
 
-// db holds database connection
-//var db *sql.DB
-
 func ConnectDatabase() *sql.DB {
 	var err error
 	pgConn := fmt.Sprintf("host=%s port=%s user=%s password=%s "+

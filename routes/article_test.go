@@ -9,8 +9,9 @@ import (
 )
 
 func TestArticleRoutes(t *testing.T) {
+	env := &Env{}
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
-	GetArticle(c)
+	env.GetArticle(c)
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }

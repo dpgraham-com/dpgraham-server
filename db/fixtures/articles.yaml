@@ -1,0 +1,16 @@
+# articles.yml
+- id: 1
+  title: Hello World
+  content: Hello world, come on be happy!
+  author: John Doe
+  created_date: 2020-12-31 23:59:59
+  updated_date: 2020-12-31 23:59:59
+  published: true
+
+- id: 2
+  title: Foo Bar
+  content: foo bar, just barring up some foo. You know, the usual.
+  author: John Doe
+  created_date: 2022-12-31 23:59:59
+  updated_date: 2022-12-31 23:59:59
+  published: false
