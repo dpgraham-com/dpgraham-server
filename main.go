@@ -12,7 +12,7 @@ import (
 func routerSetup() (router *gin.Engine) {
 	// Create and config Env used to dependency inject necessary items for handlers
 	env := routes.Env{
-		DB: db.ConnectDatabase(),
+		Articles: db.ConnectDatabase(),
 	}
 	// Create and config gin.Engine
 	router = gin.Default()

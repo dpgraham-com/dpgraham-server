@@ -82,8 +82,9 @@ func prepareTestDatabase() {
 func TestQueryArticleById(t *testing.T) {
 	// Arrange
 	prepareTestDatabase()
+	articleStore := &ArticleStore{DB: db}
 	// Act
-	article, _ := QueryArticle(db, 1)
+	article, _ := articleStore.QueryArticleById(1)
 	// Assert
 	assert.Equal(t, article.Id, 1)
 }
@@ -92,8 +93,9 @@ func TestQueryArticleById(t *testing.T) {
 func TestQueryAllReturnsOnlyPublished(t *testing.T) {
 	// Arrange
 	prepareTestDatabase()
+	articleStore := &ArticleStore{DB: db}
 	// Act
-	allArticles, _ := QueryAllArticles(db)
+	allArticles, _ := articleStore.QueryAllArticles()
 	// Assert
 	for _, article := range allArticles {
 		assert.Equal(t, article.Published, true)

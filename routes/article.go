@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"database/sql"
 	"github.com/dpgrahm4401/dpgraham-server/db"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -10,7 +9,7 @@ import (
 )
 
 type Env struct {
-	DB *sql.DB
+	Articles db.ArticleAccessor
 }
 
 // GetArticle top level handlerFunc that returns an article given an ID
@@ -21,7 +20,7 @@ func (env *Env) GetArticle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	articleById, err := db.QueryArticle(env.DB, idInt)
+	articleById, err := env.Articles.QueryArticleById(idInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
@@ -32,7 +31,7 @@ func (env *Env) GetArticle(c *gin.Context) {
 
 // GetAllArticles Top level handlerFunc that returns a list of article metadata
 func (env *Env) GetAllArticles(c *gin.Context) {
-	allArticles, err := db.QueryAllArticles(env.DB)
+	allArticles, err := env.Articles.QueryAllArticles()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
