@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-// getEnv is a local helper function to use a fallback value if an environment variable is not set
+// getEnv is a local helper function use an environment variable or fallback if not set
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
@@ -17,6 +17,7 @@ func getEnv(key, fallback string) string {
 	return fallback
 }
 
+// ConnectDatabase is a returns a database connection
 func ConnectDatabase() *sql.DB {
 	var err error
 	pgConn := fmt.Sprintf("host=%s port=%s user=%s password=%s "+

@@ -8,6 +8,7 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"log"
 	"os"
 	"testing"
 )
@@ -17,45 +18,51 @@ var (
 	fixtures *testfixtures.Loader
 )
 
-// TestMain is a special function for Go that runs before any tests are run
+// TestMain is a runs before any tests are run. we use it to set up our test database
 func TestMain(m *testing.M) {
 	var err error
 
 	// Open connection to the test database.
-	db, err = sql.Open("postgres", fmt.Sprintf("host=localhost port=5432 sslmode=disable dbname=%s user=%s password=%s",
+	db, err = sql.Open("postgres", fmt.Sprintf("host=%s port=%s  dbname=%s user=%s password=%s sslmode=disable",
+		getEnv("DPG_DB_HOST", "localhost"),
+		getEnv("DPG_DB_PORT", "5432"),
 		getEnv("DPG_DB_NAME", "dpgraham_test"),
 		getEnv("DPG_DB_USER", "dg"),
 		getEnv("DPG_DB_PASSWORD", "password123"),
 	))
 	if err != nil {
-		fmt.Println(err)
+		log.Println("Could not connect to the test database, ensure it is running and accepting connections")
+		log.Println("The Following environment variables are used to connect to the database:")
+		log.Println("DPG_DB_HOST, DPG_DB_PORT, DPG_DB_NAME, DPG_DB_USER, DPG_DB_PASSWORD")
+		log.Fatal("error getting driver", err)
 	}
 
 	// migrate database schema
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
-		fmt.Println("error getting driver", err)
+		log.Fatal("error getting driver: ", err)
 	}
 
 	migration, err := migrate.NewWithDatabaseInstance(
 		"file://migrations",
 		"postgres", driver)
 	if err != nil {
-		fmt.Println("error creating migrations", err)
+		log.Fatal("error creating migrations: ", err)
 	}
 
-	err = migration.Up()
-	if err != nil {
-		fmt.Println("error migrating")
+	// migrate changes up, throw error if NOT ErrNoChange
+	if err = migration.Up(); err != migrate.ErrNoChange {
+		log.Fatal("error migrating database up: ", err)
 	}
 
+	// Load fixtures from memory
 	fixtures, err = testfixtures.New(
 		testfixtures.Database(db),
 		testfixtures.Dialect("postgres"),
 		testfixtures.Directory("fixtures"),
 	)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal("Error preparing fixtures from files", err)
 	}
 
 	os.Exit(m.Run())
@@ -64,21 +71,27 @@ func TestMain(m *testing.M) {
 // prepareTestDatabase loads the fixtures into the test database
 func prepareTestDatabase() {
 	if err := fixtures.Load(); err != nil {
-		fmt.Println(err)
+		log.Fatal("Error loading fixtures", err)
 	}
 }
 
 // Test returns a single article from our DB by id
 func TestQueryArticleById(t *testing.T) {
+	// Arrange
 	prepareTestDatabase()
+	// Act
 	article, _ := QueryArticle(db, 1)
+	// Assert
 	assert.Equal(t, article.Id, 1)
 }
 
 // Test returns all (and only) published articles
 func TestQueryAllReturnsOnlyPublished(t *testing.T) {
+	// Arrange
 	prepareTestDatabase()
+	// Act
 	allArticles, _ := QueryAllArticles(db)
+	// Assert
 	for _, article := range allArticles {
 		assert.Equal(t, article.Published, true)
 	}

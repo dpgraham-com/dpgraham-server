@@ -30,7 +30,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ env.POSTGRES_DB }}
         ports:
-          - 5432/tcp
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -51,6 +51,14 @@ jobs:
 
       - name: Build
         run:  go build -v ./...
+
+      - name: configure environment
+        run: |
+          echo "export DPG_BD_HOST=localhost" >> $GITHUB_ENV
+          echo "export DPG_BD_PORT=5432" >> $GITHUB_ENV
+          echo "export DPG_BD_USER=${{ env.POSTGRES_USER }}" >> $GITHUB_ENV
+          echo "export DPG_BD_PASSWORD=${{ env.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+          echo "export DPG_BD_NAME=${{ env.POSTGRES_DB }}" >> $GITHUB_ENV
 
       - name: Run functional tests
         run:  go test -v ./...
