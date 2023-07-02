@@ -2,6 +2,11 @@ name: Run tests
 # Run go test when commits are pushed to any branch 
 #  or there's a pull request to main
 
+env:
+  POSTGRES_USER: dg
+  POSTGRES_PASSWORD: password123
+  POSTGRES_DB: dpgraham_test
+
 on:
   push:
     branches: 
@@ -14,8 +19,23 @@ on:
 
 
 jobs:
-  test_package:
+  run_all_tests:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Install Go

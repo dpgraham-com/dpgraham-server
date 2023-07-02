@@ -17,12 +17,12 @@ var (
 	fixtures *testfixtures.Loader
 )
 
-// TestMain is a special function that runs before any tests are run
+// TestMain is a special function for Go that runs before any tests are run
 func TestMain(m *testing.M) {
 	var err error
 
 	// Open connection to the test database.
-	db, err = sql.Open("postgres", "dbname=dpgraham_test user=dg password=password123 host=localhost port=5432 sslmode=disable")
+	db, err = sql.Open("postgres", fmt.Sprint("dbname=dpgraham_test user=dg password=password123 host=localhost port=5432 sslmode=disable"))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -57,19 +57,21 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+// prepareTestDatabase loads the fixtures into the test database
 func prepareTestDatabase() {
 	if err := fixtures.Load(); err != nil {
 		fmt.Println(err)
 	}
 }
 
+// Test returns a single article from our DB by id
 func TestQueryArticleById(t *testing.T) {
 	prepareTestDatabase()
 	article, _ := QueryArticle(db, 1)
 	assert.Equal(t, article.Id, 1)
 }
 
-// Test returns all published articles
+// Test returns all (and only) published articles
 func TestQueryAllReturnsOnlyPublished(t *testing.T) {
 	prepareTestDatabase()
 	allArticles, _ := QueryAllArticles(db)
