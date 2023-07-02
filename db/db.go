@@ -9,6 +9,14 @@ import (
 	"os"
 )
 
+// getEnv is a local helper function to use a fallback value if an environment variable is not set
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
 func ConnectDatabase() *sql.DB {
 	var err error
 	pgConn := fmt.Sprintf("host=%s port=%s user=%s password=%s "+

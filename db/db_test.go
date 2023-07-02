@@ -22,7 +22,11 @@ func TestMain(m *testing.M) {
 	var err error
 
 	// Open connection to the test database.
-	db, err = sql.Open("postgres", fmt.Sprint("dbname=dpgraham_test user=dg password=password123 host=localhost port=5432 sslmode=disable"))
+	db, err = sql.Open("postgres", fmt.Sprintf("host=localhost port=5432 sslmode=disable dbname=%s user=%s password=%s",
+		getEnv("DPG_DB_NAME", "dpgraham_test"),
+		getEnv("DPG_DB_USER", "dg"),
+		getEnv("DPG_DB_PASSWORD", "password123"),
+	))
 	if err != nil {
 		fmt.Println(err)
 	}
