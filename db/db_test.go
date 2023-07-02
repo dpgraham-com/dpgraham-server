@@ -51,8 +51,11 @@ func TestMain(m *testing.M) {
 	}
 
 	// migrate changes up, throw error if NOT ErrNoChange
-	if err = migration.Up(); err != migrate.ErrNoChange {
-		log.Fatal("error migrating database up: ", err)
+	if err = migration.Up(); err != nil {
+		if err != migrate.ErrNoChange {
+			log.Println("error", err)
+			log.Fatal("error migrating database up: ", err)
+		}
 	}
 
 	// Load fixtures from memory
