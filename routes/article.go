@@ -9,7 +9,7 @@ import (
 )
 
 type Env struct {
-	Articles db.ArticleAccessor
+	Articles db.DatabaseAccessor
 }
 
 // GetArticle top level handlerFunc that returns an article given an ID

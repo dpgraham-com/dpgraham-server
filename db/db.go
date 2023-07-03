@@ -13,7 +13,7 @@ type ArticleStore struct {
 	DB *sql.DB
 }
 
-type ArticleAccessor interface {
+type DatabaseAccessor interface {
 	QueryAllArticles() ([]models.Article, error)
 	QueryArticleById(id int) (models.Article, error)
 }
