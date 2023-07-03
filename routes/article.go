@@ -9,7 +9,7 @@ import (
 )
 
 type Env struct {
-	Articles db.DatabaseAccessor
+	Articles db.ArticleQuerier
 }
 
 // GetArticle top level handlerFunc that returns an article given an ID
@@ -20,7 +20,7 @@ func (env *Env) GetArticle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	articleById, err := env.Articles.QueryArticleById(idInt)
+	articleById, err := env.Articles.GetByID(idInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
@@ -31,7 +31,7 @@ func (env *Env) GetArticle(c *gin.Context) {
 
 // GetAllArticles Top level handlerFunc that returns a list of article metadata
 func (env *Env) GetAllArticles(c *gin.Context) {
-	allArticles, err := env.Articles.QueryAllArticles()
+	allArticles, err := env.Articles.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return

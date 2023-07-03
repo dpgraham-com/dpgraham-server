@@ -13,9 +13,9 @@ type ArticleStore struct {
 	DB *sql.DB
 }
 
-type DatabaseAccessor interface {
-	QueryAllArticles() ([]models.Article, error)
-	QueryArticleById(id int) (models.Article, error)
+type ArticleQuerier interface {
+	GetAll() ([]models.Article, error)
+	GetByID(id int) (models.Article, error)
 }
 
 // getEnv is a local helper function use an environment variable or fallback if not set
@@ -44,7 +44,7 @@ func ConnectDatabase() *ArticleStore {
 	return articleStore
 }
 
-func (a *ArticleStore) QueryAllArticles() ([]models.Article, error) {
+func (a *ArticleStore) GetAll() ([]models.Article, error) {
 	allArticleQuery, err := a.DB.Prepare(
 		` SELECT
                      id,
@@ -80,7 +80,7 @@ func (a *ArticleStore) QueryAllArticles() ([]models.Article, error) {
 	return articles, nil
 }
 
-func (a *ArticleStore) QueryArticleById(id int) (models.Article, error) {
+func (a *ArticleStore) GetByID(id int) (models.Article, error) {
 	article := models.Article{}
 	err := a.DB.QueryRow("SELECT * FROM articles WHERE id = $1", id).Scan(
 		&article.Id, &article.CreatedDate, &article.LastUpdate, &article.Content, &article.Published,
