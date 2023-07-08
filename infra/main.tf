@@ -12,9 +12,9 @@ terraform {
 }
 
 provider "google" {
-  project     = "dpgraham"
-  region      = "us-east1"
-  zone        = "us-east1-b"
+  project = "dpgraham"
+  region  = "us-east1"
+  zone    = "us-east1-b"
 }
 
 
