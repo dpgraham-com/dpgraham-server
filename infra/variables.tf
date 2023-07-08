@@ -18,7 +18,7 @@ variable "db_username" {
 
 variable "db_password" {
   description = "Database administrator password"
-  default = "password123" // POC for now
+  default     = "password123" // POC for now
   type        = string
   sensitive   = true
 }
