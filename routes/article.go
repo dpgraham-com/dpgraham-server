@@ -20,7 +20,7 @@ func (env *Env) GetArticle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	articleById, err := env.Articles.GetByID(idInt)
+	articleById, err := env.Articles.ByID(idInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
@@ -31,7 +31,7 @@ func (env *Env) GetArticle(c *gin.Context) {
 
 // GetAllArticles Top level handlerFunc that returns a list of article metadata
 func (env *Env) GetAllArticles(c *gin.Context) {
-	allArticles, err := env.Articles.GetAll()
+	allArticles, err := env.Articles.All()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return

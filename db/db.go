@@ -14,8 +14,8 @@ type ArticleStore struct {
 }
 
 type ArticleQuerier interface {
-	GetAll() ([]models.Article, error)
-	GetByID(id int) (models.Article, error)
+	All() ([]models.Article, error)
+	ByID(id int) (models.Article, error)
 }
 
 // getEnv is a local helper function use an environment variable or fallback if not set
@@ -26,7 +26,7 @@ func getEnv(key, fallback string) string {
 	return fallback
 }
 
-// ConnectDatabase is a returns a database connection
+// ConnectDatabase is a returns a pointer to a database connection
 func ConnectDatabase() *ArticleStore {
 	var err error
 	pgConn := fmt.Sprintf("host=%s port=%s user=%s password=%s "+
@@ -44,7 +44,7 @@ func ConnectDatabase() *ArticleStore {
 	return articleStore
 }
 
-func (a *ArticleStore) GetAll() ([]models.Article, error) {
+func (a *ArticleStore) All() ([]models.Article, error) {
 	allArticleQuery, err := a.DB.Prepare(
 		` SELECT
                      id,
@@ -80,7 +80,7 @@ func (a *ArticleStore) GetAll() ([]models.Article, error) {
 	return articles, nil
 }
 
-func (a *ArticleStore) GetByID(id int) (models.Article, error) {
+func (a *ArticleStore) ByID(id int) (models.Article, error) {
 	article := models.Article{}
 	err := a.DB.QueryRow("SELECT * FROM articles WHERE id = $1", id).Scan(
 		&article.Id, &article.CreatedDate, &article.LastUpdate, &article.Content, &article.Published,
