@@ -12,7 +12,6 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("terraform-key.json")
   project     = "dpgraham"
   region      = "us-east1"
   zone        = "us-east1-b"
