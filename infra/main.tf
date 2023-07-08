@@ -18,29 +18,6 @@ provider "google" {
   zone        = "us-east1-b"
 }
 
-variable "project" {
-  default     = "dpgraham"
-  type        = string
-  description = "The project ID"
-}
-
-variable "region" {
-  type        = string
-  description = "The region to deploy to"
-  default     = "us-east1"
-}
-
-variable "db_username" {
-  description = "Database administrator username"
-  type        = string
-  default     = "root" // POC for now
-}
-
-variable "db_password" {
-  description = "Database administrator password"
-  type        = string
-  sensitive   = true
-}
 
 resource "google_compute_network" "vpc_network" {
   name = "terraform-network"
