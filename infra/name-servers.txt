@@ -1,0 +1,8 @@
+NS
+ns-cloud-a1.googledomains.com.
+ns-cloud-a2.googledomains.com.
+ns-cloud-a3.googledomains.com.
+ns-cloud-a4.googledomains.com.
+
+SOA
+ ns-cloud-a1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300
