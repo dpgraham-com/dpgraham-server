@@ -1,20 +1,18 @@
+# This Workflow builds and pushes a Docker image to Google Artifact Registry
+
+# Prerequisites:
 # 1. Create service account
-#.   * Service Account Token Creator
-#.   * Artifact Registry Writer
+#   1a. Service Account Token Creator
 # 2. Generate service account key
-#.   * In GitHub project -> Settings -> Secrets -> Actions -> New Repository Secret
-#.     Name: GCP_CREDENTIALS
-#.     Value: key.json contents
-# 3. Create repo in artifact repository
-#.   * Name: $env.REPOSITORY below
-#.   * Region: $env.GAR_LOCATION below
+#   2a. convert multiline key to single line with jq command (cat key.json | jq -r tostring)
+#   2b. create environment secret, Name: GOOGLE_CREDENTIALS, Value: key.json contents
+# 3. Make sure the Artifact repo has already been provisioned. Add to env:
 
 name: Docker build and push to Artifact Registry
 
 on:
-  push
-#  release:
-#    types: [published]
+  release:
+    types: [published]
 
 env:
   PROJECT_ID: dpgraham

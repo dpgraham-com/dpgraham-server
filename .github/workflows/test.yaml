@@ -8,9 +8,9 @@ env:
   POSTGRES_DB: dpgraham_test
 
 on:
-#  push:
-#    branches:
-#      - '*'
+  push:
+    branches:
+      - '*'
   pull_request:
     branches:
       - 'main'
