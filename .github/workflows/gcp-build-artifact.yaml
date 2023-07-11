@@ -23,8 +23,11 @@ env:
   IMAGE_NAME: dpgraham-server
 
 jobs:
-  login-build-push:
-    name: Build and push to GCP
+  build-push:
+    environment: staging
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +38,7 @@ jobs:
         uses: docker/metadata-action@v4
         id: meta
         with:
-          images: ${{ GOOGLE_REGISTRY_LOCATION }}-docker.pkg.dev/${{ PROJECT_ID }}/${{ REPOSITORY }}/${{ IMAGE_NAME }}
+          images: ${{ env.GOOGLE_REGISTRY_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -43,24 +46,24 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
 
-#      - name: Authenticate Google Cloud
-#        uses: google-github-actions/auth@v0
-#        id: auth
-#        with:
-#          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
-#          token_format: 'access_token'
+      - name: Authenticate Google Cloud
+        uses: google-github-actions/auth@v1
+        id: auth
+        with:
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+          token_format: 'access_token'
 
-#      - name: Login to Google Artifact Registry
-#        uses: docker/login-action@v1
-#        with:
-#          registry: ${{ env.GOOGLE_REGISTRY_LOCATION }}-docker.pkg.dev
-#          username: 'oauth2accesstoken'
-#          password: '${{ steps.auth.outputs.access_token }}'
+      - name: Login to Google Artifact Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.GOOGLE_REGISTRY_LOCATION }}-docker.pkg.dev
+          username: 'oauth2accesstoken'
+          password: ${{ steps.auth.outputs.access_token }}
 
-      - name: Build
+      - name: Build and Push
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: false
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
