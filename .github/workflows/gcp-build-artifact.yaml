@@ -1,0 +1,66 @@
+# 1. Create service account
+#.   * Service Account Token Creator
+#.   * Artifact Registry Writer
+# 2. Generate service account key
+#.   * In GitHub project -> Settings -> Secrets -> Actions -> New Repository Secret
+#.     Name: GCP_CREDENTIALS
+#.     Value: key.json contents
+# 3. Create repo in artifact repository
+#.   * Name: $env.REPOSITORY below
+#.   * Region: $env.GAR_LOCATION below
+
+name: Docker build and push to Artifact Registry
+
+on:
+  push
+#  release:
+#    types: [published]
+
+env:
+  PROJECT_ID: dpgraham
+  GOOGLE_REGISTRY_LOCATION: us-east1
+  REPOSITORY: dpgraham-com
+  IMAGE_NAME: dpgraham-server
+
+jobs:
+  login-build-push:
+    name: Build and push to GCP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Docker meta
+        uses: docker/metadata-action@v4
+        id: meta
+        with:
+          images: ${{ GOOGLE_REGISTRY_LOCATION }}-docker.pkg.dev/${{ PROJECT_ID }}/${{ REPOSITORY }}/${{ IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+#      - name: Authenticate Google Cloud
+#        uses: google-github-actions/auth@v0
+#        id: auth
+#        with:
+#          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+#          token_format: 'access_token'
+
+#      - name: Login to Google Artifact Registry
+#        uses: docker/login-action@v1
+#        with:
+#          registry: ${{ env.GOOGLE_REGISTRY_LOCATION }}-docker.pkg.dev
+#          username: 'oauth2accesstoken'
+#          password: '${{ steps.auth.outputs.access_token }}'
+
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
