@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
+	"os"
 )
 
 // routerSetup returns a fully configured mux(?) with routes attached
@@ -31,8 +32,15 @@ func routerSetup() (router *gin.Engine) {
 
 // Entry point for the application
 func main() {
+	log.Printf("Starting server")
 	router := routerSetup()
-	err := router.Run(":8080")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Defaulting to port %s", port)
+	}
+	log.Printf("Listening on port %s", port)
+	err := router.Run(":" + port)
 	if err != nil {
 		log.Fatal(err)
 	}
