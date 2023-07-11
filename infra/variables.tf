@@ -4,6 +4,12 @@ variable "project" {
   description = "The project ID"
 }
 
+variable "domain_name" {
+  description = "the top level domain of the project"
+  type        = string
+  default     = "dpgraham.com"
+}
+
 variable "region" {
   type        = string
   description = "The region to deploy to"

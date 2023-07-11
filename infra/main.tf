@@ -22,7 +22,7 @@ resource "google_compute_network" "vpc" {
   name = "dpgraham-vpc"
 }
 
-resource "google_sql_database_instance" "staging" {
+resource "google_sql_database_instance" "dpgraham_postgres" {
   name             = "dpgraham-postgres"
   database_version = "POSTGRES_14"
   region           = var.region
@@ -41,11 +41,11 @@ resource "google_sql_database_instance" "staging" {
 
 resource "google_sql_database" "dpgraham_sql" {
   name     = "dpgraham"
-  instance = google_sql_database_instance.staging.name
+  instance = google_sql_database_instance.dpgraham_postgres.name
 }
 
 resource "google_sql_user" "users" {
-  instance = google_sql_database_instance.staging.name
+  instance = google_sql_database_instance.dpgraham_postgres.name
   type     = "BUILT_IN"
   name     = var.db_username
   password = var.db_password
@@ -104,4 +104,16 @@ resource "google_dns_record_set" "dpgraham_com_record_set" {
   rrdatas = [
     google_compute_instance.test_apache.network_interface[0].access_config[0].nat_ip
   ]
+}
+
+# google compute managed ssl certificate
+resource "google_compute_managed_ssl_certificate" "dpgraham_com" {
+  project     = var.project
+  provider    = google-beta
+  description = "Google managed SSL certificate for dpgraham.com"
+  name        = "dpgraham-ssl-cert"
+
+  managed {
+    domains = [var.domain_name]
+  }
 }
