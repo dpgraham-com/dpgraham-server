@@ -117,3 +117,10 @@ resource "google_compute_managed_ssl_certificate" "dpgraham_com" {
     domains = [var.domain_name]
   }
 }
+
+resource "google_artifact_registry_repository" "dpgraham_com" {
+  location      = var.region
+  repository_id = "dpgraham-com"
+  description   = "Repository for dpgraham.com"
+  format        = "DOCKER"
+}
