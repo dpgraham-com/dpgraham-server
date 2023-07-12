@@ -124,3 +124,14 @@ resource "google_artifact_registry_repository" "dpgraham_com" {
   description   = "Repository for dpgraham.com"
   format        = "DOCKER"
 }
+
+resource "google_cloud_run_v2_service" "server" {
+  name     = "dpgraham-api"
+  location = var.region
+
+  template {
+    containers {
+      image = format("%s-docker.pkg.dev/%s/%s/%s:sha-9d32ef0", google_artifact_registry_repository.dpgraham_com.location, var.project, google_artifact_registry_repository.dpgraham_com.repository_id, var.server_image_name)
+    }
+  }
+}

@@ -28,3 +28,9 @@ variable "db_password" {
   type        = string
   sensitive   = true
 }
+
+variable "server_image_name" {
+  description = "The name of the image to use for the server"
+  type        = string
+  default     = "dpgraham-server"
+}
