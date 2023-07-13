@@ -6,6 +6,6 @@ metadata:
   labels:
     {{- include "dpg-server.labels" . | nindent 4 }}
 data:
-  DPG_DB_HOST: "192.168.1.201"
-  DPG_DB_PORT: "5431"
-  DPG_DB_NAME: "dpgraham_v1"
+  DB_HOST: "192.168.1.201"
+  DB_PORT: "5431"
+  DB_NAME: "dpgraham_v1"

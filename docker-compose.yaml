@@ -8,11 +8,11 @@ services:
 #    ports:
 #      - '8080:8080'
 #    environment:
-#      DPG_DB_HOST: postgres
-#      DPG_DB_PORT: 5432
-#      DPG_DB_NAME: dpgraham_v1
-#      DPG_DB_USER: dg
-#      DPG_DB_PASSWORD: password
+#      DB_HOST: postgres
+#      DB_PORT: 5432
+#      DB_NAME: dpgraham_v1
+#      DB_USER: dg
+#      DB_PASSWORD: password
 #    depends_on:
 #      postgres:
 #        condition: service_healthy
@@ -22,9 +22,9 @@ services:
     container_name: dpg-postgres
     image: 'postgres:14'
     environment:
-      POSTGRES_DB: ${DPG_DB_NAME}
-      POSTGRES_USER: ${DPG_DB_USER}
-      POSTGRES_PASSWORD: ${DPG_DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - '5432:5432'
     healthcheck:

@@ -33,12 +33,12 @@ spec:
             - configMapRef:
                 name: {{ include "dpg-server.fullname" . }}-config
           env:
-            - name: DPG_DB_PASSWORD
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: db_password
                   name: {{ .Release.Name }}-auth
-            - name: DPG_DB_USER
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   key: db_user

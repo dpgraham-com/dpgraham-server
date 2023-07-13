@@ -24,16 +24,16 @@ func TestMain(m *testing.M) {
 
 	// Open connection to the test database.
 	db, err = sql.Open("postgres", fmt.Sprintf("host=%s port=%s  dbname=%s user=%s password=%s sslmode=disable",
-		getEnv("DPG_DB_HOST", "localhost"),
-		getEnv("DPG_DB_PORT", "5432"),
-		getEnv("DPG_DB_NAME", "dpgraham_test"),
-		getEnv("DPG_DB_USER", "dg"),
-		getEnv("DPG_DB_PASSWORD", "password123"),
+		getEnv("DB_HOST", "localhost"),
+		getEnv("DB_PORT", "5432"),
+		getEnv("DB_NAME", "dpgraham_test"),
+		getEnv("DB_USER", "dg"),
+		getEnv("DB_PASSWORD", "password123"),
 	))
 	if err != nil {
 		log.Println("Could not connect to the test database, ensure it is running and accepting connections")
 		log.Println("The Following environment variables are used to connect to the database:")
-		log.Println("DPG_DB_HOST, DPG_DB_PORT, DPG_DB_NAME, DPG_DB_USER, DPG_DB_PASSWORD")
+		log.Println("DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD")
 		log.Fatal("error getting driver", err)
 	}
 
