@@ -21,6 +21,15 @@ provider "google" {
 resource "google_compute_network" "vpc" {
   name = "dpgraham-vpc"
 }
+resource "google_project_service" "vpcaccess-api" {
+  project = var.project
+  service = "vpcaccess.googleapis.com"
+}
+
+resource "google_vpc_access_connector" "dpgraham-vpc-connector" {
+  name = "dpgraham-vpc-connector"
+  network = google_compute_network.vpc.name
+}
 
 resource "google_sql_database_instance" "dpgraham_postgres" {
   name             = "dpgraham-postgres"
@@ -168,6 +177,14 @@ resource "google_cloud_run_v2_service" "server" {
         name = "DB_PASSWORD"
         value = google_sql_user.users.password
       }
+    }
+    vpc_access {
+      connector = google_vpc_access_connector.dpgraham-vpc-connector.name
+      egress = "ALL_TRAFFIC"
+    }
+    scaling {
+      # Limit scale up to prevent any cost blow outs!
+      max_instance_count = 3
     }
   }
 }
