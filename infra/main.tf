@@ -162,10 +162,6 @@ resource "google_cloud_run_v2_service" "server" {
         name  = "DB_PORT"
         value = "5432"
       }
-      #      env {
-      #        name = "DB_HOST"
-      #        value = google_sql_database_instance.dpgraham_postgres.ip_address
-      #      }
       env {
         name  = "DB_NAME"
         value = google_sql_database.dpgraham_sql.name
@@ -177,6 +173,10 @@ resource "google_cloud_run_v2_service" "server" {
       env {
         name  = "DB_PASSWORD"
         value = google_sql_user.users.password
+      }
+      env {
+        name  = "DB_HOST"
+        value = var.db_host
       }
     }
     vpc_access {

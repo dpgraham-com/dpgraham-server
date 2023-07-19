@@ -29,6 +29,12 @@ variable "db_password" {
   sensitive   = true
 }
 
+variable "db_host" {
+  description = "Database host ip address"
+  default     = "10.14.144.3" // POC for now
+  type        = string
+}
+
 variable "server_image_name" {
   description = "The name of the image to use for the server"
   type        = string
