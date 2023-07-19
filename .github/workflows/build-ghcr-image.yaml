@@ -1,11 +1,15 @@
-name: 'Build Docker Image'
-# This custom, reusable workflow builds and pushes a Docker image to GitHub Container Registry.
+name: 'Build Image for GitHub Container Registry'
+# This workflow will build a docker image, tag it, and push it to the GitHub Container Registry
+# - It will name the image the same as the repository name
 
 on:
   push:
+    tags:
+      - '*'
 
 jobs:
   build_docker_image:
+    name: Build Image for GHCR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,9 +19,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: dpgraham4401/${{ inputs.IMAGE_NAME }}
+          # Uses the repository name as the image name
+          images: ghcr.io/${{ github.repository }}
           tags: |
-            type=ref,event=branch
             type=ref,event=pr
             type=ref,event=tag
             type=semver,pattern={{version}}

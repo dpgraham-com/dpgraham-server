@@ -13,6 +13,7 @@ defaults:
 
 jobs:
   terraform_apply:
+    name: Terraform Apply
     environment: staging
     runs-on: ubuntu-latest
     steps:

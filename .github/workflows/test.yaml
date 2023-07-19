@@ -20,6 +20,7 @@ on:
 
 jobs:
   run_all_tests:
+    name: Run Tests
     runs-on: ubuntu-latest
 
     services:
