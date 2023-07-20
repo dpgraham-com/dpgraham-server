@@ -9,7 +9,9 @@ This is the documentation for [dpgraham.com](https://dpgraham.com). It holds doc
 3. [CI/CD](https://en.wikipedia.org/wiki/CI/CD) pipeline and implementation.
     - See the [devops](./devops) directory.
 4. The Database design/schema.
+    - Not yet implemented.
 5. Project high level architecture and design.
+    - Not yet implemented.
 
 We talk more specifically about the source of the front end in the separate
 repository [dpgraham4401/dpgraham-client](https://github.com/dpgraham4401/dpgraham-client).
