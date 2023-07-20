@@ -10,7 +10,9 @@ This is the documentation for [dpgraham.com](https://dpgraham.com). It holds doc
     - See the [devops](./devops.md) section
 4. The Database design/schema.
     - Not yet implemented.
-5. Project system architecture.
+5. System architecture.
+    - see the [system-architecture](./system-architecture.md) section
+6. Configuration.
     - Not yet implemented.
 
 We talk more specifically about the source of the front end in the separate
