@@ -97,18 +97,10 @@ resource "google_compute_firewall" "dpgraham_http" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-# to create a DNS zone
-resource "google_dns_managed_zone" "dpgraham_com" {
-  name          = "dpgraham-zone"
-  dns_name      = "dpgraham.com."
-  description   = "DNS zone following the google create-domain-tutorial"
-  force_destroy = "true"
-}
-
 # to register web-server's ip address in DNS
 resource "google_dns_record_set" "dpgraham_com_record_set" {
-  name         = google_dns_managed_zone.dpgraham_com.dns_name
-  managed_zone = google_dns_managed_zone.dpgraham_com.name
+  name         = module.domain.dns_name
+  managed_zone = module.domain.name
   type         = "A"
   ttl          = 10
   rrdatas      = [
@@ -117,18 +109,11 @@ resource "google_dns_record_set" "dpgraham_com_record_set" {
   ]
 }
 
-# google compute managed ssl certificate
-resource "google_compute_managed_ssl_certificate" "dpgraham_com" {
-  project     = var.project
-  provider    = google-beta
-  description = "Google managed SSL certificate for dpgraham.com"
-  name        = "dpgraham-ssl-cert"
-
-  managed {
-    domains = [var.domain_name]
-  }
+module "domain" {
+  source      = "./modules/domain"
+  project_id  = var.project
+  domain_name = var.domain_name
 }
-
 resource "google_artifact_registry_repository" "dpgraham_com" {
   location      = var.region
   repository_id = "dpgraham-com"
