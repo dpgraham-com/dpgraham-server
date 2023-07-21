@@ -9,3 +9,25 @@ variable "static_ip_name" {
   type        = string
   default     = "dpgraham-com-global-ip"
 }
+
+variable "load_balancer_name" {
+  description = "Name of the load balancer"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "The domain name to use for the load balancer"
+  type        = string
+  default     = "dpgraham.com"
+}
+
+variable "ssl" {
+  description = "Whether to use SSL or not"
+  type        = bool
+  default     = true
+}
+
+variable "service_name" {
+  description = "The name of the service to deploy"
+  type        = string
+}
