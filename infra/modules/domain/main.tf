@@ -1,11 +1,11 @@
 # The domain modules sets up a our Domain name and resources related
 # to DNS, sub-domains, and the like... (todo update module docs LOL)
 
-resource "google_compute_managed_ssl_certificate" "dpgraham_com" {
+resource "google_compute_managed_ssl_certificate" "dpgraham_com_ssl_cert" {
   project     = var.project_id
   provider    = google-beta
   description = "Google managed SSL certificate for dpgraham.com"
-  name        = "dpgraham-ssl-cert"
+  name        = var.ssl_cert_name
 
   managed {
     domains = [var.domain_name]

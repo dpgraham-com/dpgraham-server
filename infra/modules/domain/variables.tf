@@ -14,3 +14,14 @@ variable "dns_zone_name" {
   type        = string
   default     = "dpgraham-dns-zone"
 }
+
+variable "ipv4_address" {
+  description = "The Statis address that nameservers should resolve to for our top level domain"
+  type        = string
+}
+
+variable "ssl_cert_name" {
+  description = "name to give to the google managed ssl certification"
+  type        = string
+  default     = "dpgraham-com-ssl-cert"
+}

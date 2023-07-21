@@ -61,6 +61,7 @@ resource "google_sql_user" "users" {
   password = var.db_password
 }
 
+# ToDo delete
 # Example apache server we'll use to test Cloud DNS
 resource "google_compute_instance" "test_apache" {
   name         = "test-apache-instance"
@@ -86,6 +87,7 @@ resource "google_compute_instance" "test_apache" {
   EOF
 }
 
+# ToDo delete
 # to allow http traffic
 resource "google_compute_firewall" "dpgraham_http" {
   name    = "allow-http-traffic"
@@ -109,11 +111,18 @@ resource "google_dns_record_set" "dpgraham_com_record_set" {
   ]
 }
 
-module "domain" {
-  source      = "./modules/domain"
-  project_id  = var.project
-  domain_name = var.domain_name
+module "load_balancer" {
+  source = "./modules/gcp-load-balancer"
 }
+
+# The domain modules is used to provision resources, such as DNS zones and record sets for our domain
+module "domain" {
+  source       = "./modules/domain"
+  project_id   = var.project
+  domain_name  = var.domain_name
+  ipv4_address = module.load_balancer.global_ip
+}
+
 resource "google_artifact_registry_repository" "dpgraham_com" {
   location      = var.region
   repository_id = "dpgraham-com"
