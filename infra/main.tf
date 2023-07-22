@@ -105,16 +105,15 @@ resource "google_dns_record_set" "dpgraham_com_record_set" {
   managed_zone = module.domain.name
   type         = "A"
   ttl          = 10
-  rrdatas = [
-    #    google_compute_instance.test_apache.network_interface[0].access_config[0].nat_ip
-    "34.160.59.217"
+  rrdatas      = [
+    "34.36.7.223"
   ]
 }
 
 module "load_balancer" {
-  source             = "./modules/gcp-load-balancer"
-  load_balancer_name = "staging-frontend"
-  service_name       = google_cloud_run_v2_service.server.name
+  source       = "./modules/gcp-load-balancer"
+  name         = "staging-frontend"
+  service_name = google_cloud_run_v2_service.server.name
 }
 
 # The domain modules is used to provision resources, such as DNS zones and record sets for our domain

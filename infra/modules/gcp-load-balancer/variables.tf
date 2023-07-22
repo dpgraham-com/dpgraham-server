@@ -10,7 +10,7 @@ variable "static_ip_name" {
   default     = "dpgraham-com-global-ip"
 }
 
-variable "load_balancer_name" {
+variable "name" {
   description = "Name of the load balancer"
   type        = string
 }

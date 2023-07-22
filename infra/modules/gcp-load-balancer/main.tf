@@ -20,12 +20,13 @@ resource "google_compute_region_network_endpoint_group" "serverless_neg" {
 module "lb-http" {
   source                          = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version                         = "~> 9.0"
+  name                            = var.name
   project                         = var.project_id
-  name                            = var.load_balancer_name
   ssl                             = var.ssl
   managed_ssl_certificate_domains = [var.domain_name]
   https_redirect                  = var.ssl
   labels                          = { "example-label" = "cloud-run-example" }
+  load_balancing_scheme           = "EXTERNAL_MANAGED"
 
   backends = {
     default = {
