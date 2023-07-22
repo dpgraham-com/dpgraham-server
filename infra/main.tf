@@ -136,3 +136,11 @@ resource "google_cloud_run_v2_service" "server" {
     }
   }
 }
+
+module "frontend-service" {
+  source        = "./modules/cloud-run"
+  name          = "dpgraham-frontend"
+  image         = format("%s-docker.pkg.dev/%s/%s/%s:latest", google_artifact_registry_repository.dpgraham_com.location, var.project, google_artifact_registry_repository.dpgraham_com.repository_id, var.client_image_name)
+  vpc_connector = google_vpc_access_connector.dpgraham-vpc-connector.id
+  port          = "3000"
+}

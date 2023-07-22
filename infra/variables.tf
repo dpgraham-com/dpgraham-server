@@ -40,3 +40,9 @@ variable "server_image_name" {
   type        = string
   default     = "dpgraham-server"
 }
+
+variable "client_image_name" {
+  description = "The name of the image to use for the client"
+  type        = string
+  default     = "dpgraham-client"
+}
