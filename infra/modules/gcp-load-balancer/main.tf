@@ -1,16 +1,8 @@
-resource "google_compute_global_address" "dpgraham_com_static_ip" {
-  address_type = "EXTERNAL"
-  description  = "testing for creating a reserved static IP for dpgraham.com"
-  ip_version   = "IPV4"
-  name         = var.static_ip_name
-  project      = var.project_id
-}
-
 resource "google_compute_region_network_endpoint_group" "serverless_neg" {
   provider              = google-beta
   name                  = "serverless-neg"
   network_endpoint_type = "SERVERLESS"
-  region                = "us-east1"
+  region                = var.region
   project               = var.project_id
   cloud_run {
     service = var.service_name

@@ -31,3 +31,9 @@ variable "service_name" {
   description = "The name of the service to deploy"
   type        = string
 }
+
+variable "region" {
+  description = "The region to deploy to"
+  type        = string
+  default     = "us-east1"
+}

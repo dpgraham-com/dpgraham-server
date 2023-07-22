@@ -61,43 +61,6 @@ resource "google_sql_user" "users" {
   password = var.db_password
 }
 
-# ToDo delete
-# Example apache server we'll use to test Cloud DNS
-resource "google_compute_instance" "test_apache" {
-  name         = "test-apache-instance"
-  machine_type = "e2-micro"
-  zone         = "us-east1-b"
-
-  boot_disk {
-    initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-2204-lts"
-    }
-  }
-
-  network_interface {
-    network = google_compute_network.vpc.name
-    access_config {
-      // Ephemeral public IP
-    }
-  }
-  metadata_startup_script = <<-EOF
-  sudo apt-get update && \
-  sudo apt-get install apache2 -y && \
-  echo "<!doctype html><html><body><h1>Hello World!</h1></body></html>" > /var/www/html/index.html
-  EOF
-}
-
-# ToDo delete
-# to allow http traffic
-resource "google_compute_firewall" "dpgraham_http" {
-  name    = "allow-http-traffic"
-  network = google_compute_network.vpc.name
-  allow {
-    ports    = ["80"]
-    protocol = "tcp"
-  }
-  source_ranges = ["0.0.0.0/0"]
-}
 
 # to register web-server's ip address in DNS
 resource "google_dns_record_set" "dpgraham_com_record_set" {
@@ -106,7 +69,7 @@ resource "google_dns_record_set" "dpgraham_com_record_set" {
   type         = "A"
   ttl          = 10
   rrdatas      = [
-    "34.36.7.223"
+    module.load_balancer.ip_address
   ]
 }
 
@@ -121,7 +84,7 @@ module "domain" {
   source       = "./modules/domain"
   project_id   = var.project
   domain_name  = var.domain_name
-  ipv4_address = module.load_balancer.global_ip
+  ipv4_address = module.load_balancer.ip_address
 }
 
 resource "google_artifact_registry_repository" "dpgraham_com" {
