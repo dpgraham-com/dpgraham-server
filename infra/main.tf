@@ -61,21 +61,9 @@ resource "google_sql_user" "users" {
   password = var.db_password
 }
 
-
-# to register web-server's ip address in DNS
-resource "google_dns_record_set" "dpgraham_com_record_set" {
-  name         = module.domain.dns_name
-  managed_zone = module.domain.name
-  type         = "A"
-  ttl          = 10
-  rrdatas      = [
-    module.load_balancer.ip_address
-  ]
-}
-
 module "load_balancer" {
   source       = "./modules/gcp-load-balancer"
-  name         = "staging-frontend"
+  name         = "dpgraham-frontend"
   service_name = google_cloud_run_v2_service.server.name
 }
 
