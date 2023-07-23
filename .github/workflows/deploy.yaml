@@ -1,0 +1,14 @@
+# This Workflow deploys a Docker image to Google Cloud Run
+
+name: Deploy to Cloud Run
+
+on:
+  push:
+#  release:
+#    types: [ published ]
+
+jobs:
+  build_gcp_image:
+    uses: ./.github/workflows/build-gcp-image.yaml
+    with:
+      environment: production

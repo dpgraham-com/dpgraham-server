@@ -3,9 +3,7 @@ name: 'Build Image for GitHub Container Registry'
 # - It will name the image the same as the repository name
 
 on:
-  push:
-    tags:
-      - '*'
+  workflow_call:
 
 jobs:
   build_docker_image:
