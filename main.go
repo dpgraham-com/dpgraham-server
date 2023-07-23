@@ -9,12 +9,24 @@ import (
 	"os"
 )
 
+// getEnv is a local helper function use an environment variable or fallback if not set
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
 // routerSetup returns a fully configured mux(?) with routes attached
 func routerSetup() (router *gin.Engine) {
 	// Create and config Env used to dependency inject necessary items for handlers
 	env := routes.Env{
 		Articles: db.ConnectDatabase(),
 	}
+	// set GIN_MODE to release if not set
+	ginMode := getEnv(gin.EnvGinMode, gin.ReleaseMode)
+	gin.SetMode(ginMode)
+
 	// Create and config gin.Engine
 	router = gin.Default()
 	router.Use(cors.New(cors.Config{
@@ -33,7 +45,7 @@ func routerSetup() (router *gin.Engine) {
 
 // Entry point for the application
 func main() {
-	log.Printf("Starting server")
+	log.Println("Starting server")
 	router := routerSetup()
 	port := os.Getenv("PORT")
 	if port == "" {

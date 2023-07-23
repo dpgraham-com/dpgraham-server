@@ -18,6 +18,15 @@ type ArticleQuerier interface {
 	ByID(id int) (models.Article, error)
 }
 
+// mustEnv is a helper function to get environment variables or die trying
+func mustEnv(key string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	log.Fatal("Environment variable not set: " + key)
+	return ""
+}
+
 // getEnv is a local helper function use an environment variable or fallback if not set
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
@@ -31,11 +40,11 @@ func ConnectDatabase() *ArticleStore {
 	var err error
 	pgConn := fmt.Sprintf("host=%s port=%s user=%s password=%s "+
 		"dbname=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"))
+		mustEnv("DB_HOST"),
+		getEnv("DB_PORT", "5432"),
+		mustEnv("DB_USER"),
+		mustEnv("DB_PASSWORD"),
+		getEnv("DB_NAME", "dpgraham"))
 	db, err := sql.Open("postgres", pgConn)
 	if err != nil {
 		log.Fatal(err)
