@@ -23,6 +23,13 @@ on:
         description: 'The version of the image that was built'
         value: ${{ jobs.build_push.outputs.version }}
 
+env:
+  PROJECT_ID: ${{ vars.PROJECT_ID }}
+  REPOSITORY: ${{ vars.REPOSITORY }}
+  IMAGE_NAME: ${{ vars.IMAGE_NAME }}
+  GOOGLE_REGISTRY_LOCATION: ${{ vars.GOOGLE_REGISTRY_LOCATION }}
+
+
 jobs:
   build_push:
     name: Build Image for GCP
