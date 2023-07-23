@@ -1,6 +1,6 @@
 # This Workflow deploys a Docker image to Google Cloud Run
 
-name: Deploy to Cloud Run
+name: On Release
 
 on:
   push:
@@ -23,3 +23,12 @@ jobs:
       - name: Echo output
         run: |
           echo "The image version is ${{ needs.build_gcp_image.outputs.version }}"
+
+  deploy_to_cloud_run:
+    name: Deploy to Cloud Run
+    uses: ./.github/workflows/cloud-run-deploy.yaml
+    with:
+      environment: production
+      version: ${{ needs.build_gcp_image.outputs.version }}
+      service: dpgraham-api
+    secrets: inherit
