@@ -21,6 +21,12 @@ on:
         type: string
         default: 'dpgraham-api'
 
+env:
+  PROJECT_ID: ${{ vars.PROJECT_ID }}
+  REPOSITORY: ${{ vars.REPOSITORY }}
+  IMAGE_NAME: ${{ vars.IMAGE_NAME }}
+  GOOGLE_REGISTRY_LOCATION: ${{ vars.GOOGLE_REGISTRY_LOCATION }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -40,9 +46,9 @@ jobs:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
           token_format: 'access_token'
 
-#      - name: Deploy to Cloud Run
-#        id: deploy
-#        uses: 'google-github-actions/deploy-cloudrun@v1'
-#        with:
-#          service: ${{ inputs.service }}
-#          images: ${{ env.GOOGLE_REGISTRY_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v1'
+        with:
+          service: ${{ inputs.service }}
+          images: ${{ env.GOOGLE_REGISTRY_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}
