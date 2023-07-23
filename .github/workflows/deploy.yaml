@@ -10,11 +10,6 @@ on:
 jobs:
   build_gcp_image:
     name: Build Image for GCP
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Build Image
-        uses: ./.github/workflows/build-gcp-image.yaml
-        with:
-          environment: production
-
+    uses: ./.github/workflows/build-gcp-image.yaml
+    with:
+      environment: production
