@@ -21,7 +21,7 @@ on:
     outputs:
       version:
         description: 'The version of the image that was built'
-        value: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+        value: ${{ jobs.build_push.outputs.version }}
 
 env:
   PROJECT_ID: dpgraham
@@ -30,14 +30,16 @@ env:
   IMAGE_NAME: dpgraham-server
 
 jobs:
-  build-push:
+  build_push:
     name: Build Image for GCP
     environment: ${{ inputs.environment }}
     permissions:
       contents: 'read'
       id-token: 'write'
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
