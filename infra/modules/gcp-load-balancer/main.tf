@@ -26,7 +26,7 @@ resource "google_compute_url_map" "lb-server-client-map" {
   default_service = module.lb-http.backend_services["default"].self_link
 
   host_rule {
-    hosts        = ["*"]
+    hosts        = [var.domain_name]
     path_matcher = "allpaths"
   }
 
@@ -65,8 +65,8 @@ module "lb-http" {
   https_redirect                  = var.ssl
   labels                          = { "example-label" = "cloud-run-example" }
   load_balancing_scheme           = "EXTERNAL_MANAGED"
-  #  url_map                         = google_compute_url_map.lb-server-client-map.self_link
-  #  create_url_map                  = false
+  url_map                         = google_compute_url_map.lb-server-client-map.self_link
+  create_url_map                  = false
 
   backends = {
     default = {
