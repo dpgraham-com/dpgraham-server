@@ -23,12 +23,6 @@ on:
         description: 'The version of the image that was built'
         value: ${{ jobs.build_push.outputs.version }}
 
-env:
-  PROJECT_ID: dpgraham
-  GOOGLE_REGISTRY_LOCATION: us-east1
-  REPOSITORY: dpgraham-com
-  IMAGE_NAME: dpgraham-server
-
 jobs:
   build_push:
     name: Build Image for GCP
