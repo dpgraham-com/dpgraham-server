@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -38,6 +39,12 @@ func routerSetup() (router *gin.Engine) {
 	{
 		api.GET("/article", env.GetAllArticles)
 		api.GET("/article/:id", env.GetArticle)
+		api.GET("/blog", func(c *gin.Context) {
+			c.Redirect(http.StatusFound, "/api/article")
+		})
+		api.GET("/blog/:id", func(c *gin.Context) {
+			c.Redirect(http.StatusFound, "/api/article/"+c.Param("id"))
+		})
 		api.GET("/status", env.HealthCheck)
 	}
 	return
