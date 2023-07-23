@@ -27,8 +27,13 @@ variable "ssl" {
   default     = true
 }
 
-variable "service_name" {
-  description = "The name of the service to deploy"
+variable "backend_service" {
+  description = "The name of the backend service that serves our restful API"
+  type        = string
+}
+
+variable "frontend_service" {
+  description = "The name of the frontend service the serves our react app"
   type        = string
 }
 

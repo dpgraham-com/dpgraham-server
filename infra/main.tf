@@ -62,9 +62,10 @@ resource "google_sql_user" "users" {
 }
 
 module "load_balancer" {
-  source       = "./modules/gcp-load-balancer"
-  name         = "dpgraham-frontend"
-  service_name = google_cloud_run_v2_service.server.name
+  source           = "./modules/gcp-load-balancer"
+  name             = "dpgraham-frontend"
+  backend_service  = google_cloud_run_v2_service.server.name
+  frontend_service = module.frontend-service.name
 }
 
 # The domain modules is used to provision resources, such as DNS zones and record sets for our domain
