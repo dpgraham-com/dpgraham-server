@@ -13,7 +13,7 @@ This is the documentation for [dpgraham.com](https://dpgraham.com). It holds doc
 5. System architecture.
     - see the [system-architecture](./system-architecture.md) section
 6. Configuration.
-    - Not yet implemented.
+    - see the [configuration](./configuration.md) section
 
 We talk more specifically about the source of the front end in the separate
 repository [dpgraham4401/dpgraham-client](https://github.com/dpgraham4401/dpgraham-client).
