@@ -18,6 +18,10 @@ on:
         required: true
         type: string
         default: 'production'
+    outputs:
+      version:
+        description: 'The version of the image that was built'
+        value: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
 
 env:
   PROJECT_ID: dpgraham
