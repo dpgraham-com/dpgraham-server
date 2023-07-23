@@ -24,8 +24,9 @@ func routerSetup() (router *gin.Engine) {
 	// Set gin routes AFTER config
 	api := router.Group("/api")
 	{
-		api.GET("/blog", env.GetAllArticles)
-		api.GET("/blog/:id", env.GetArticle)
+		api.GET("/article", env.GetAllArticles)
+		api.GET("/article/:id", env.GetArticle)
+		api.GET("/status", env.HealthCheck)
 	}
 	return
 }
