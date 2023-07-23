@@ -13,3 +13,4 @@ jobs:
     uses: ./.github/workflows/build-gcp-image.yaml
     with:
       environment: production
+    secrets: inherit

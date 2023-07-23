@@ -12,7 +12,6 @@ name: Docker build and push to Artifact Registry
 
 on:
   workflow_call:
-    secrets: inherit
     inputs:
       environment:
         description: 'The environment to deploy to'
