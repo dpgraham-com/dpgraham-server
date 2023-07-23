@@ -35,3 +35,11 @@ variable "max_count" {
   description = "The maximum number of instances to run"
   default     = 3
 }
+
+variable "env" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default = []
+}

@@ -64,7 +64,7 @@ resource "google_sql_user" "users" {
 module "load_balancer" {
   source           = "./modules/gcp-load-balancer"
   name             = "dpgraham-frontend"
-  backend_service  = google_cloud_run_v2_service.server.name
+  backend_service  = module.server-service.name
   frontend_service = module.frontend-service.name
 }
 
@@ -83,65 +83,39 @@ resource "google_artifact_registry_repository" "dpgraham_com" {
   format        = "DOCKER"
 }
 
-
-data "google_iam_policy" "noauth" {
-  binding {
-    role    = "roles/run.invoker"
-    members = ["allUsers"]
-  }
-}
-
-resource "google_cloud_run_service_iam_policy" "noauth" {
-  location = google_cloud_run_v2_service.server.location
-  project  = google_cloud_run_v2_service.server.project
-  service  = google_cloud_run_v2_service.server.name
-
-  policy_data = data.google_iam_policy.noauth.policy_data
-}
-
-resource "google_cloud_run_v2_service" "server" {
-  name     = "dpgraham-api"
-  location = var.region
-
-  template {
-    containers {
-      image = format("%s-docker.pkg.dev/%s/%s/%s:latest", google_artifact_registry_repository.dpgraham_com.location, var.project, google_artifact_registry_repository.dpgraham_com.repository_id, var.server_image_name)
-      env {
-        name  = "DB_PORT"
-        value = "5432"
-      }
-      env {
-        name  = "DB_NAME"
-        value = google_sql_database.dpgraham_sql.name
-      }
-      env {
-        name  = "DB_USER"
-        value = google_sql_user.users.name
-      }
-      env {
-        name  = "DB_PASSWORD"
-        value = google_sql_user.users.password
-      }
-      env {
-        name  = "DB_HOST"
-        value = var.db_host
-      }
-    }
-    vpc_access {
-      connector = google_vpc_access_connector.dpgraham-vpc-connector.id
-      egress    = "ALL_TRAFFIC"
-    }
-    scaling {
-      # Limit scale up to prevent any cost blow outs!
-      max_instance_count = 3
-    }
-  }
-}
-
 module "frontend-service" {
   source        = "./modules/cloud-run"
   name          = "dpgraham-frontend"
   image         = format("%s-docker.pkg.dev/%s/%s/%s:latest", google_artifact_registry_repository.dpgraham_com.location, var.project, google_artifact_registry_repository.dpgraham_com.repository_id, var.client_image_name)
   vpc_connector = google_vpc_access_connector.dpgraham-vpc-connector.id
   port          = "3000"
+}
+module "server-service" {
+  source        = "./modules/cloud-run"
+  name          = "dpgraham-server"
+  image         = format("%s-docker.pkg.dev/%s/%s/%s:latest", google_artifact_registry_repository.dpgraham_com.location, var.project, google_artifact_registry_repository.dpgraham_com.repository_id, var.server_image_name)
+  vpc_connector = google_vpc_access_connector.dpgraham-vpc-connector.id
+  port          = "8080"
+  env           = [
+    {
+      name  = "DB_PORT"
+      value = "5432"
+    },
+    {
+      name  = "DB_NAME"
+      value = google_sql_database.dpgraham_sql.name
+    },
+    {
+      name  = "DB_USER"
+      value = google_sql_user.users.name
+    },
+    {
+      name  = "DB_PASSWORD"
+      value = google_sql_user.users.password
+    },
+    {
+      name  = "DB_HOST"
+      value = var.db_host
+    }
+  ]
 }

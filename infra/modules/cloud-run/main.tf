@@ -8,6 +8,13 @@ resource "google_cloud_run_v2_service" "default" {
         container_port = var.port
       }
       image = var.image
+      dynamic "env" {
+        for_each = var.env
+        content {
+          name  = env.value.name
+          value = env.value.value
+        }
+      }
     }
     vpc_access {
       connector = var.vpc_connector
