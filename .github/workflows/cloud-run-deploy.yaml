@@ -19,7 +19,7 @@ on:
         description: 'The name of the Cloud Run service to deploy to'
         required: true
         type: string
-        default: 'dpgraham-api'
+        default: 'dpgraham-server'
 
 env:
   PROJECT_ID: ${{ vars.PROJECT_ID }}
