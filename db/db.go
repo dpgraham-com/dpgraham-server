@@ -91,7 +91,19 @@ func (a *ArticleStore) All() ([]models.Article, error) {
 
 func (a *ArticleStore) ByID(id int) (models.Article, error) {
 	article := models.Article{}
-	err := a.DB.QueryRow("SELECT * FROM articles WHERE id = $1", id).Scan(
+	err := a.DB.QueryRow(
+		`SELECT 
+                     id,
+                     to_char(created_date, 'mm/dd/yyyy'),
+                     to_char(updated_date, 'mm/dd/yyyy'),
+                     content,
+                     published,
+                     title,
+                     author
+				FROM 
+				    articles 
+				WHERE 
+				    id = $1`, id).Scan(
 		&article.Id, &article.CreatedDate, &article.LastUpdate, &article.Content, &article.Published,
 		&article.Title, &article.Author)
 	if err != nil {
