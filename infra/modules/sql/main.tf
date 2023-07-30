@@ -2,6 +2,8 @@
 
 locals {
   database_tier = var.environment == "production" ? "db-custom-1-3840" : "db-f1-micro"
+  disk_size     = var.environment == "production" ? 10 : 10
+  availability  = var.environment == "production" ? "REGIONAL" : "ZONAL"
 }
 
 resource "google_sql_database_instance" "database_instance" {
@@ -13,7 +15,8 @@ resource "google_sql_database_instance" "database_instance" {
   settings {
     tier              = local.database_tier
     activation_policy = "ALWAYS"
-    availability_type = "ZONAL"
+    availability_type = local.availability
+    disk_size         = local.disk_size
     database_flags {
       name  = "cloudsql.iam_authentication"
       value = "on"
