@@ -1,8 +1,8 @@
 package main
 
 import (
-	"dpgraham.com/db"
-	"dpgraham.com/routes"
+	"dpgraham.com/internal/db"
+	"dpgraham.com/internal/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"

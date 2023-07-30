@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"dpgraham.com/models"
+	"dpgraham.com/internal/models"
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"

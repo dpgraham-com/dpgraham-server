@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"dpgraham.com/db"
+	"dpgraham.com/internal/db"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
