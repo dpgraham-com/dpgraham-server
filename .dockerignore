@@ -2,7 +2,7 @@
 .editorconfig
 configs/*
 .dockerignore
-dpg-server/
+helm/
 
 # static
 content/
