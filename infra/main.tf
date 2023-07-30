@@ -68,6 +68,16 @@ module "load_balancer" {
   frontend_service = module.frontend-service.name
 }
 
+module "database" {
+  source      = "./modules/sql"
+  project_id  = var.project
+  region      = var.region
+  name        = "dpgraham"
+  db_password = "test1234"
+  db_username = "dg"
+  environment = "development"
+}
+
 # The domain modules is used to provision resources, such as DNS zones and record sets for our domain
 module "domain" {
   source       = "./modules/domain"
@@ -96,7 +106,7 @@ module "server-service" {
   image         = format("%s-docker.pkg.dev/%s/%s/%s:latest", google_artifact_registry_repository.dpgraham_com.location, var.project, google_artifact_registry_repository.dpgraham_com.repository_id, var.server_image_name)
   vpc_connector = google_vpc_access_connector.dpgraham-vpc-connector.id
   port          = "8080"
-  env = [
+  env           = [
     {
       name  = "DB_PORT"
       value = "5432"
