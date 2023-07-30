@@ -2,8 +2,8 @@ package db
 
 import (
 	"database/sql"
+	"dpgraham.com/models"
 	"fmt"
-	"github.com/dpgrahm4401/dpgraham-server/models"
 	_ "github.com/lib/pq"
 	"log"
 	"os"

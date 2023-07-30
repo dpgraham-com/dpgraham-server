@@ -1,4 +1,4 @@
-module github.com/dpgrahm4401/dpgraham-server
+module dpgraham.com
 
 go 1.20
 
