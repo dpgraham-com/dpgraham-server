@@ -31,3 +31,4 @@ db.sqlite
 # MacOS
 .DS_Store
 */.DS_Store
+/server

@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"dpgraham.com/internal/models"
+	"dpgraham.com/pkg/models"
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
@@ -37,6 +37,7 @@ func getEnv(key, fallback string) string {
 
 // ConnectDatabase is a returns a pointer to a database connection
 func ConnectDatabase() *ArticleStore {
+	log.Println("DB_HOST: " + os.Getenv("DB_HOST"))
 	var err error
 	pgConn := fmt.Sprintf("host=%s port=%s user=%s password=%s "+
 		"dbname=%s sslmode=disable",
