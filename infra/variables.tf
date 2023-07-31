@@ -1,7 +1,7 @@
 variable "project" {
-  default     = "dpgraham"
-  type        = string
   description = "The project ID"
+  type        = string
+  default     = "dpgraham"
 }
 
 variable "domain_name" {
@@ -11,8 +11,8 @@ variable "domain_name" {
 }
 
 variable "region" {
-  type        = string
   description = "The region to deploy to"
+  type        = string
   default     = "us-east1"
 }
 
@@ -33,6 +33,12 @@ variable "db_host" {
   description = "Database host ip address"
   default     = "10.14.144.3" // POC for now
   type        = string
+}
+
+variable "db_name" {
+  description = "Database name"
+  type        = string
+  default     = "dpgraham"
 }
 
 variable "server_image_name" {

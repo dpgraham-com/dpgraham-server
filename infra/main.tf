@@ -63,11 +63,9 @@ resource "google_vpc_access_connector" "dpgraham-vpc-connector" {
 
 #module "database" {
 #  source      = "./modules/sql"
-#  project_id  = var.project
-#  region      = var.region
-#  name        = "dpgraham"
-#  db_password = "test1234"
-#  db_username = "dg"
+#  name        = var.db_name
+#  db_password = var.db_password
+#  db_username = var.db_username
 #  environment = "development"
 #  vpc         = google_compute_network.vpc.id
 #}

@@ -4,10 +4,11 @@ locals {
   database_tier = var.environment == "production" ? "db-custom-1-3840" : "db-f1-micro"
   disk_size     = var.environment == "production" ? 10 : 10
   availability  = var.environment == "production" ? "REGIONAL" : "ZONAL"
+  instance_name = var.environment == "production" ? "${var.name}-postgres" : "${var.name}-postgres-dev"
 }
 
 resource "google_sql_database_instance" "database_instance" {
-  name             = "${var.name}-postgres-test"
+  name             = local.instance_name
   database_version = "POSTGRES_14"
   region           = var.region
   project          = var.project_id

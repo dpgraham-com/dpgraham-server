@@ -1,36 +1,36 @@
 variable "region" {
-  default     = "us-east-1"
-  type        = string
   description = "The region to deploy to"
+  type        = string
+  default     = "us-east1"
 }
 
 variable "project_id" {
-  default     = "dpgraham"
-  type        = string
   description = "The project id to deploy to"
+  type        = string
+  default     = "dpgraham"
 }
 
 variable "name" {
-  default     = "dpgraham"
-  type        = string
   description = "The name to deploy to"
+  type        = string
+  default     = "dpgraham"
 }
 
 variable "db_username" {
-  sensitive   = true
-  type        = string
   description = "The database username"
+  type        = string
+  sensitive   = true
 }
 
 variable "db_password" {
-  sensitive   = true
-  type        = string
   description = "The database password"
+  type        = string
+  sensitive   = true
 }
 
 variable "environment" {
-  type        = string
   description = "The environment to deploy to"
+  type        = string
   validation {
     condition     = contains(["development", "production"], var.environment)
     error_message = "Environment must be one of [dev, prod]"
@@ -38,16 +38,6 @@ variable "environment" {
 }
 
 variable "vpc" {
+  description = "The ID of vpc the database is deployed to"
   type        = string
-  description = "The vpc the database is deployed to"
 }
-
-#variable ip_range_name {
-#  type        = string
-#  description = "The name of the reserved ip range"
-#}
-#
-#variable "private_vpc_connection" {
-#  type        = string
-#  description = "The name of the private vpc connection"
-#}
