@@ -1,8 +1,13 @@
-# A terraform module to create a Cloud SQL instance with a Postgres database and a user.
+# A module to create a Cloud SQL Postgres instance, database, user and related networking resources.
+
+# This modules uses a private IP address and private services access to set up database access.
+# For an overview of using a Private IP address with Cloud SQL see:
+# https://cloud.google.com/sql/docs/postgres/private-ip
 
 locals {
+  # database tiers follow legacy sets of "db-custom-<VCPUs>-<RAM in MB>"
   database_tier = var.environment == "production" ? "db-custom-1-3840" : "db-f1-micro"
-  disk_size     = var.environment == "production" ? 10 : 10
+  disk_size     = var.environment == "production" ? 10 : 10 # in GB, 10 GB is the minimum
   availability  = var.environment == "production" ? "REGIONAL" : "ZONAL"
   instance_name = var.environment == "production" ? "${var.name}-postgres" : "${var.name}-postgres-dev"
 }
@@ -45,8 +50,9 @@ resource "google_sql_user" "user" {
   password = var.db_password
 }
 
+# This is part of setting up private services access for Cloud SQL
 resource "google_compute_global_address" "private_ip_range" {
-  name          = "${var.name}-ip-range" # must be set to this for some reason "${vpc_name}-ip-range"
+  name          = "${var.name}-ip-range"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 16
