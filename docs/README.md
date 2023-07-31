@@ -5,7 +5,7 @@ This is the documentation for [dpgraham.com](https://dpgraham.com). It holds doc
 1. The http server, written in [Go](https://golang.org/).
     - see the [source-design](./source-design.md) section
 2. infrastructure as code (Iac), configs written in [Terraform](https://www.terraform.io/).
-    - Not yet implemented.
+    - see the [infrastructure](./infrastructure/README.md) section
 3. [CI/CD](https://en.wikipedia.org/wiki/CI/CD) pipeline and implementation.
     - See the [devops](./devops.md) section
 4. The Database design/schema.
