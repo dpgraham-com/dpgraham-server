@@ -7,7 +7,7 @@ locals {
 }
 
 resource "google_sql_database_instance" "database_instance" {
-  name             = "${var.name}-postgres"
+  name             = "${var.name}-postgres-test"
   database_version = "POSTGRES_14"
   region           = var.region
   project          = var.project_id
