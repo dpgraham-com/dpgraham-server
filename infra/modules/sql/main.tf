@@ -23,7 +23,7 @@ resource "google_sql_database_instance" "database_instance" {
     }
     ip_configuration {
       private_network    = var.vpc_id
-      ipv4_enabled       = false
+      ipv4_enabled       = true
       allocated_ip_range = var.ip_range_name
     }
   }
