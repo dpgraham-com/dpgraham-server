@@ -61,15 +61,6 @@ resource "google_vpc_access_connector" "dpgraham-vpc-connector" {
   ip_cidr_range = "10.14.0.0/28"
 }
 
-resource "google_compute_subnetwork" "vpc_subnet" {
-  name          = "test-vpc-subnet"
-  ip_cidr_range = "10.0.0.0/16"
-  region        = var.region
-  project       = var.project
-  network       = google_compute_network.vpc.self_link
-}
-
-
 #module "database" {
 #  source      = "./modules/sql"
 #  project_id  = var.project
@@ -117,7 +108,7 @@ module "server-service" {
   image         = format("%s-docker.pkg.dev/%s/%s/%s:latest", google_artifact_registry_repository.dpgraham_com.location, var.project, google_artifact_registry_repository.dpgraham_com.repository_id, var.server_image_name)
   vpc_connector = google_vpc_access_connector.dpgraham-vpc-connector.id
   port          = "8080"
-  env = [
+  env           = [
     {
       name  = "DB_PORT"
       value = "5432"
