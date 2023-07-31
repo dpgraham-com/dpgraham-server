@@ -32,6 +32,23 @@ resource "google_vpc_access_connector" "dpgraham-vpc-connector" {
   ip_cidr_range = "10.14.0.0/28"
 }
 
+
+resource "google_compute_subnetwork" "vpc_subnet" {
+  name          = "test-vpc-subnet"
+  ip_cidr_range = "10.0.0.0/16"
+  region        = var.region
+  project       = var.project
+  network       = google_compute_network.vpc.self_link
+}
+
+resource "google_compute_global_address" "sql_ip_range" {
+  name          = "dpgraham-vpc-ip-range" # must be set to this for some reason "${vpc_name}-ip-range"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.vpc.id
+}
+
 resource "google_sql_database_instance" "dpgraham_postgres" {
   name             = "dpgraham-postgres"
   database_version = "POSTGRES_14"
@@ -69,13 +86,15 @@ module "load_balancer" {
 }
 
 module "database" {
-  source      = "./modules/sql"
-  project_id  = var.project
-  region      = var.region
-  name        = "dpgraham"
-  db_password = "test1234"
-  db_username = "dg"
-  environment = "development"
+  source        = "./modules/sql"
+  project_id    = var.project
+  region        = var.region
+  name          = "dpgraham"
+  db_password   = "test1234"
+  db_username   = "dg"
+  environment   = "development"
+  vpc_id        = google_compute_network.vpc.id
+  ip_range_name = google_compute_global_address.sql_ip_range.name
 }
 
 # The domain modules is used to provision resources, such as DNS zones and record sets for our domain
@@ -106,7 +125,7 @@ module "server-service" {
   image         = format("%s-docker.pkg.dev/%s/%s/%s:latest", google_artifact_registry_repository.dpgraham_com.location, var.project, google_artifact_registry_repository.dpgraham_com.repository_id, var.server_image_name)
   vpc_connector = google_vpc_access_connector.dpgraham-vpc-connector.id
   port          = "8080"
-  env = [
+  env           = [
     {
       name  = "DB_PORT"
       value = "5432"

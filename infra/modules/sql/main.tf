@@ -21,6 +21,11 @@ resource "google_sql_database_instance" "database_instance" {
       name  = "cloudsql.iam_authentication"
       value = "on"
     }
+    ip_configuration {
+      private_network    = var.vpc_id
+      ipv4_enabled       = false
+      allocated_ip_range = var.ip_range_name
+    }
   }
 }
 

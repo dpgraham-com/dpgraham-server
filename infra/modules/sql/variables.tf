@@ -36,3 +36,13 @@ variable "environment" {
     error_message = "Environment must be one of [dev, prod]"
   }
 }
+
+variable "vpc_id" {
+  type        = string
+  description = "The vpc the database is deployed to"
+}
+
+variable ip_range_name {
+  type        = string
+  description = "The name of the reserved ip range"
+}
