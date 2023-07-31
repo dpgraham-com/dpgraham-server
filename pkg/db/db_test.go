@@ -34,7 +34,7 @@ func TestMain(m *testing.M) {
 		log.Println("Could not connect to the test database, ensure it is running and accepting connections")
 		log.Println("The Following environment variables are used to connect to the database:")
 		log.Println("DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD")
-		log.Fatal("error getting driver", err)
+		log.Fatal("error connecting to database", err)
 	}
 
 	// migrate database schema
@@ -44,7 +44,7 @@ func TestMain(m *testing.M) {
 	}
 
 	migration, err := migrate.NewWithDatabaseInstance(
-		"file://migrations",
+		"file://../../migrations",
 		"postgres", driver)
 	if err != nil {
 		log.Fatal("error creating migrations: ", err)
