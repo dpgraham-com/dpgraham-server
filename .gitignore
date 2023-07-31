@@ -21,9 +21,6 @@ tmp/
 # Go workspace file
 go.work
 
-# C extensions
-*.so
-
 # DB
 db.sqlite3
 db.sqlite
