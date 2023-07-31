@@ -37,17 +37,17 @@ variable "environment" {
   }
 }
 
-variable "vpc_id" {
+variable "vpc" {
   type        = string
   description = "The vpc the database is deployed to"
 }
 
-variable ip_range_name {
-  type        = string
-  description = "The name of the reserved ip range"
-}
-
-variable "private_vpc_connection" {
-  type        = string
-  description = "The name of the private vpc connection"
-}
+#variable ip_range_name {
+#  type        = string
+#  description = "The name of the reserved ip range"
+#}
+#
+#variable "private_vpc_connection" {
+#  type        = string
+#  description = "The name of the private vpc connection"
+#}
