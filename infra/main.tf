@@ -17,38 +17,6 @@ provider "google" {
   zone    = "us-east1-b"
 }
 
-
-resource "google_compute_network" "vpc" {
-  name = "dpgraham-vpc"
-}
-resource "google_project_service" "vpcaccess-api" {
-  project = var.project
-  service = "vpcaccess.googleapis.com"
-}
-
-resource "google_vpc_access_connector" "dpgraham-vpc-connector" {
-  name          = "dpgraham-vpc-connector"
-  network       = google_compute_network.vpc.name
-  ip_cidr_range = "10.14.0.0/28"
-}
-
-
-resource "google_compute_subnetwork" "vpc_subnet" {
-  name          = "test-vpc-subnet"
-  ip_cidr_range = "10.0.0.0/16"
-  region        = var.region
-  project       = var.project
-  network       = google_compute_network.vpc.self_link
-}
-
-resource "google_compute_global_address" "sql_ip_range" {
-  name          = "dpgraham-vpc-ip-range" # must be set to this for some reason "${vpc_name}-ip-range"
-  purpose       = "VPC_PEERING"
-  address_type  = "INTERNAL"
-  prefix_length = 16
-  network       = google_compute_network.vpc.id
-}
-
 resource "google_sql_database_instance" "dpgraham_postgres" {
   name             = "dpgraham-postgres"
   database_version = "POSTGRES_14"
@@ -78,6 +46,58 @@ resource "google_sql_user" "users" {
   password = var.db_password
 }
 
+resource "google_compute_network" "vpc" {
+  name = "dpgraham-vpc"
+}
+
+resource "google_project_service" "vpcaccess-api" {
+  project = var.project
+  service = "vpcaccess.googleapis.com"
+}
+
+resource "google_vpc_access_connector" "dpgraham-vpc-connector" {
+  name          = "dpgraham-vpc-connector"
+  network       = google_compute_network.vpc.name
+  ip_cidr_range = "10.14.0.0/28"
+}
+
+resource "google_compute_subnetwork" "vpc_subnet" {
+  name          = "test-vpc-subnet"
+  ip_cidr_range = "10.0.0.0/16"
+  region        = var.region
+  project       = var.project
+  network       = google_compute_network.vpc.self_link
+}
+
+resource "google_compute_global_address" "sql_ip_range" {
+  name          = "sql-vpc-ip-range" # must be set to this for some reason "${vpc_name}-ip-range"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.vpc.id
+}
+
+resource "google_service_networking_connection" "sql_vpc_connection" {
+  network                 = google_compute_network.vpc.self_link
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [
+    google_compute_global_address.sql_ip_range.name
+  ]
+}
+
+module "database" {
+  source                 = "./modules/sql"
+  project_id             = var.project
+  region                 = var.region
+  name                   = "dpgraham"
+  db_password            = "test1234"
+  db_username            = "dg"
+  environment            = "development"
+  vpc_id                 = google_compute_network.vpc.id
+  ip_range_name          = google_compute_global_address.sql_ip_range.name
+  private_vpc_connection = google_service_networking_connection.sql_vpc_connection.id
+}
+
 module "load_balancer" {
   source           = "./modules/gcp-load-balancer"
   name             = "dpgraham-frontend"
@@ -85,17 +105,6 @@ module "load_balancer" {
   frontend_service = module.frontend-service.name
 }
 
-module "database" {
-  source        = "./modules/sql"
-  project_id    = var.project
-  region        = var.region
-  name          = "dpgraham"
-  db_password   = "test1234"
-  db_username   = "dg"
-  environment   = "development"
-  vpc_id        = google_compute_network.vpc.id
-  ip_range_name = google_compute_global_address.sql_ip_range.name
-}
 
 # The domain modules is used to provision resources, such as DNS zones and record sets for our domain
 module "domain" {

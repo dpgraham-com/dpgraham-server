@@ -11,6 +11,9 @@ resource "google_sql_database_instance" "database_instance" {
   database_version = "POSTGRES_14"
   region           = var.region
   project          = var.project_id
+  depends_on       = [
+    var.private_vpc_connection
+  ]
 
   settings {
     tier              = local.database_tier

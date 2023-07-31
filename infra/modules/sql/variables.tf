@@ -46,3 +46,8 @@ variable ip_range_name {
   type        = string
   description = "The name of the reserved ip range"
 }
+
+variable "private_vpc_connection" {
+  type        = string
+  description = "The name of the private vpc connection"
+}
