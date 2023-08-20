@@ -48,7 +48,11 @@ func ConnectDatabase() *ArticleStore {
 		getEnv("DB_NAME", "dpgraham"))
 	db, err := sql.Open("postgres", pgConn)
 	if err != nil {
-		log.Fatal("Error creating database connection: ", err)
+		log.Fatal("Error opening database connection: ", err)
+	}
+	err = db.Ping()
+	if err != nil {
+		log.Fatal("Error connecting to database: ", err)
 	}
 	log.Println("Successfully connected to database")
 	articleStore := &ArticleStore{DB: db}
