@@ -62,7 +62,7 @@ create_migration_file(){
     echo "Error: migrate is not installed." >&2
   fi
   echo "Creating new migration: $1"
-  migrate create -ext sql -dir "$base_dir/db/migrations" -format unix "$1"
+  migrate create -ext sql -dir "$base_dir/migrations" -format unix "$1"
   exit 0
 }
 
@@ -135,7 +135,7 @@ migrate_up(){
   # Check if all required options are set
   check_db_flags
   echo "Running migrations UP..."
-  migrate  -database "postgresql://$user:$password@$host:$port/$database?$query" -path "$base_dir/db/migrations" up
+  migrate  -database "postgresql://$user:$password@$host:$port/$database?$query" -path "$base_dir/migrations" up
   exit 0
 }
 
@@ -144,7 +144,7 @@ migrate_down(){
   # Check if all required options are set
   check_db_flags
   echo "Running migrations DOWN..."
-  yes | migrate  -database "postgresql://$user:$password@$host:$port/$database?$query" -path "$base_dir/db/migrations" down
+  yes | migrate  -database "postgresql://$user:$password@$host:$port/$database?$query" -path "$base_dir/migrations" down
   exit 0
 }
 

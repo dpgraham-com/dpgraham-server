@@ -59,8 +59,13 @@ func main() {
 		port = "8080"
 		log.Printf("Defaulting to port %s", port)
 	}
+	host := os.Getenv("HOST")
+	if host == "" {
+		host = "localhost"
+		log.Printf("Defaulting to host %s", host)
+	}
 	log.Printf("Listening on port %s", port)
-	err := router.Run(":" + port)
+	err := router.Run(host + ":" + port)
 	if err != nil {
 		log.Fatal(err)
 	}
