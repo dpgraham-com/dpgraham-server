@@ -1,6 +1,7 @@
-name: 'Build Image for GitHub Container Registry'
 # This workflow will build a docker image, tag it, and push it to the GitHub Container Registry
 # - It will name the image the same as the repository name
+
+name: 'Build Image for GitHub Container Registry'
 
 on:
   workflow_call:

@@ -3,10 +3,9 @@
 # Prerequisites:
 # 1. Create service account
 #   1a. Service Account Token Creator
-# 2. Generate service account key
-#   2a. convert multiline key to single line with jq command (cat key.json | jq -r tostring)
-#   2b. create environment secret, Name: GOOGLE_CREDENTIALS, Value: key.json contents
-# 3. Make sure the Artifact repo has already been provisioned.
+# 2. Setup Workload Identity Federation Provider for the service account using GitHub's OIDC provider
+#   2a. https://youtu.be/ZgVhU5qvK1M  for a video overview on Workload Identity Federation Providers
+
 
 name: Docker build and push to Artifact Registry
 

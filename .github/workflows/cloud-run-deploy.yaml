@@ -1,5 +1,11 @@
 # Reusable Workflow to deploy a new revision to Cloud Run
 
+# Prerequisites:
+# 1. Create service account
+#   1a. Service Account Token Creator
+# 2. Setup Workload Identity Federation Provider for the service account using GitHub's OIDC provider
+#   2a. https://youtu.be/ZgVhU5qvK1M  for a video overview on Workload Identity Federation Providers
+
 name: Deploy to Cloud Run
 
 on:
