@@ -1,10 +1,11 @@
-# This Workflow deploys a Docker image to Google Cloud Run
+# This Workflow builds and deploys a Docker image to Google Cloud Run
 
-name: On Release
+name: Release to Production
 
 on:
   release:
-    types: [ published ]
+    types:
+    - published
 
 jobs:
   build_gcp_image:
@@ -21,7 +22,7 @@ jobs:
     with:
       environment: production
       version: ${{ needs.build_gcp_image.outputs.version }}
-      service: dpgraham-server
+      service: server-prod
     secrets: inherit
 
   build_ghcr_image:

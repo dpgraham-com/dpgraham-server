@@ -1,0 +1,31 @@
+# This Workflow builds and deploys to the Development environment
+
+name: Release to Development
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_gcp_image:
+    name: Build Image for GCP
+    uses: ./.github/workflows/build-gcp-image.yaml
+    with:
+      environment: development
+    secrets: inherit
+
+  deploy_to_cloud_run:
+    name: Deploy to Cloud Run
+    uses: ./.github/workflows/cloud-run-deploy.yaml
+    needs: build_gcp_image
+    with:
+      environment: development
+      version: ${{ needs.build_gcp_image.outputs.version }}
+      service: server-dev
+    secrets: inherit
+
+  build_ghcr_image:
+    name: Build Image for GHCR
+    uses: ./.github/workflows/build-ghcr-image.yaml
+    secrets: inherit
