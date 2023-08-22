@@ -33,6 +33,7 @@ env:
 jobs:
   build_push:
     name: Build Image for GCP
+    if: github.repository == 'dpgraham-com/dpgraham-server'
     environment: ${{ inputs.environment }}
     permissions:
       contents: 'read'

@@ -8,6 +8,7 @@ on:
 jobs:
   build_docker_image:
     name: Build Image for GHCR
+    if: github.repository == 'dpgraham-com/dpgraham-server'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

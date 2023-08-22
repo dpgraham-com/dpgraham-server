@@ -29,6 +29,7 @@ env:
 
 jobs:
   deploy:
+    if: github.repository == 'dpgraham-com/dpgraham-server'
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     permissions:
@@ -36,8 +37,8 @@ jobs:
       id-token: 'write'
 
     steps:
-      - uses: 'actions/checkout@v3'
-
+      - name: Checkout
+        uses: 'actions/checkout@v3'
 
       - name: Authenticate Google Cloud
         uses: google-github-actions/auth@v1
