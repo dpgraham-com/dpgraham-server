@@ -43,7 +43,8 @@ jobs:
         uses: google-github-actions/auth@v1
         id: auth
         with:
-          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.SA_EMAIL }}
           token_format: 'access_token'
 
       - name: Deploy to Cloud Run
